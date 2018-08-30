@@ -4,27 +4,28 @@ import cv2
 import numpy as np
 
 def main():
-
     i = 0      # カウント変数
     th = 30    # 差分画像の閾値
 
     # カメラのキャプチャ
-    cap = cv2.VideoCapture("yogore.mp4")
+    cap = cv2.VideoCapture("clean.mp4")
 
     # 最初のフレームを背景画像に設定
     # ret, bg = cap.read()
-    bg = cv2.imread('image_dirimg_000000.png')
+    bg = cv2.imread('test_result.png')
     # グレースケール変換
     bg = cv2.cvtColor(bg, cv2.COLOR_BGR2GRAY)
 
     while(cap.isOpened()):
         # フレームの取得
         ret,frame = cap.read()
-
         # グレースケール変換
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+        gray = gray[500:770,560:1080]
+
         # 差分の絶対値を計算
+        # 現在のフレーム ー 背景
         mask = cv2.absdiff(gray, bg)
 
         # 差分画像を二値化してマスク画像を算出
@@ -38,10 +39,10 @@ def main():
         i += 1    # カウントを1増やす
 
         # 背景画像の更新（一定間隔）
-        if(i > 30):
-            ret, bg = cap.read()
-            bg = cv2.cvtColor(bg, cv2.COLOR_BGR2GRAY)
-            i = 0 # カウント変数の初期化
+        # if(i > 30):
+        #     ret, bg = cap.read()
+        #     bg = cv2.cvtColor(bg, cv2.COLOR_BGR2GRAY)
+        #     i = 0 # カウント変数の初期化
 
         # qキーが押されたら途中終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
